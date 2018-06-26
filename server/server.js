@@ -21,6 +21,16 @@ app.post('/question', (request, response) => {
     })
 });
 
+app.get('/question', (request, response) => {
+    Question.find().then((question) => {
+        response.send({
+            question,
+        })
+    }, (error) => {
+        response.status(400).send(error)
+    })
+});
+
 app.listen(3000, ()=> {
     console.log('Started on port 3000');
 })
