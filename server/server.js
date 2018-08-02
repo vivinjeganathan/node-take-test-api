@@ -5,7 +5,11 @@ var { mongoose } = require('./db/mongoose');
 var { Question } = require('./models/question');
 var { User } = require('./models/user');
 
+const port = process.env.PORT | 3000;
+
+var cors = require('cors')
 var app = express();
+app.use(cors())
 
 app.use(bodyParser.json());
 
@@ -31,6 +35,6 @@ app.get('/question', (request, response) => {
     })
 });
 
-app.listen(3000, ()=> {
-    console.log('Started on port 3000');
+app.listen(port, ()=> {
+    console.log(`Started on port ${port}`);
 })
