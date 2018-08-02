@@ -5,7 +5,7 @@ var { mongoose } = require('./db/mongoose');
 var { Question } = require('./models/question');
 var { User } = require('./models/user');
 
-const port = process.env.PORT | 3000;
+const port = process.env.PORT || 3000;
 
 var cors = require('cors')
 var app = express();
