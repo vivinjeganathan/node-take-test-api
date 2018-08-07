@@ -1,44 +1,35 @@
 var { mongoose } = require('../db/mongoose'); 
 
 var Question = mongoose.model('question', {
-    forExam: {
+    exam: {
        type: String
     }, 
-    category: {
+    subject: {
        type: String
     },
     unit: {
         type: String
     },
-    subUnit: {
+    chapter: {
         type: String
     },
-    forExam: {
+    type: {
         type: String
     },
     description: {
         type: String
     },
-    optionA: {
-        type: String
-    },
-    optionB: {
-        type: String
-    },
-    optionC: {
-        type: String
-    },
-    optionD: {
-        type: String
+    options: {
+        type: Array
     },
     correctOption: {
         type : String
     },
     complexity: {
-        type: Number
+        type: String
     },
     maxTimeLimit: {
-        type: Number
+        type: String
     },
     solutionDescription: {
         type: String

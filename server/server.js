@@ -14,11 +14,12 @@ app.use(cors())
 app.use(bodyParser.json());
 
 app.post('/question', (request, response) => {
+
     var question = new Question({
         description: request.body.description
     });
 
-    question.save().then((doc) => {
+    Question(request.body).save().then((doc) => {
         response.send(doc);
     }, (error) => {
         response.status(400).send(error);
