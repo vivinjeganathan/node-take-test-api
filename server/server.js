@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var { mongoose } = require('./db/mongoose'); 
 var { Question } = require('./models/question');
 var { User } = require('./models/user');
+var ObjectID = require('mongodb').ObjectID;
 
 const port = process.env.PORT || 3000;
 
@@ -35,6 +36,25 @@ app.get('/question', (request, response) => {
         response.status(400).send(error)
     })
 });
+
+app.delete('/question/:id', (request, response) => {
+
+    var id = request.params.id
+
+    if (!ObjectID.isValid(id)) {
+        return response.status(404).send();
+    }
+
+    Question.findByIdAndRemove(id).then((question) => {
+        if (!question) {
+            return response.status(404).send();
+        }
+
+        response.send(question)
+    }).catch((error) => {
+        return response.status(400).send();
+    })
+})
 
 app.listen(port, ()=> {
     console.log(`Started on port ${port}`);
