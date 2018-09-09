@@ -1,10 +1,10 @@
 const express = require('express');
 const app = express();
 
-const questionStructureRoute = require('./questionStructure_route');
-const questionRoute = require('./question_route');
+const subjectRoute = require('./subjectRoute');
+const questionRoute = require('./questionRoute');
 
 app.use('/question', questionRoute);
-app.use('/questionStructure', questionStructureRoute);
+app.use('/subject', subjectRoute);
 
 module.exports = app;

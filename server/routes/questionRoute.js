@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const ObjectID = require('mongodb').ObjectID
 
-var { Question } = require('.././models/question');
+var { Question } = require('../models/question');
 
 app.post('/', (request, response) => {
 
