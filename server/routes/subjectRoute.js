@@ -8,9 +8,7 @@ var { Subject } = require('../models/subject');
 app.get('/', (request, response) => {
 
     Subject.find().then((subject) => {
-        response.send({
-            subject,
-        })
+        response.send(subject)
     }, (error) => {
         response.status(400).send(error)
     })
@@ -73,5 +71,49 @@ app.patch('/unit/chapter', (request, response) => {
         }
     );
 })
+
+app.delete('/:id', (request, response) => {
+
+    var id = request.params.id
+
+    if (!ObjectID.isValid(id)) {
+        return response.status(404).send();
+    }
+
+    Subject.findByIdAndRemove(id).then((subject) => {
+        if (!subject) {
+            return response.status(404).send();
+        }
+
+        response.send(subject)
+    }).catch((error) => {
+        return response.status(400).send();
+    })
+})
+
+// app.delete('/unit/', (request, response) => {
+
+//     var id = request.params.id
+//     var body = _.pick(request.body, ['subjectId', 'unitId'])
+
+//     if (!ObjectID.isValid(id)) {
+//         return response.status(404).send();
+//     }
+    
+//     var unitJson = { "_id": new ObjectID(), "name": body.name, "chapters": [] };
+    
+//     Subject.findOneAndUpdate(
+//         { _id: body.subjectId }, 
+//         { $push: { units: unitJson } },
+//         { "new": true },
+//         function (error, document) {
+//             if (error) {
+//                 response.status(400).send(error)
+//             } else {
+//                 response.send({document})
+//             }
+//         }
+//     );
+// })
 
 module.exports = app;
