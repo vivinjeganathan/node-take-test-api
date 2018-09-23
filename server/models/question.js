@@ -20,7 +20,8 @@ var Question = mongoose.model('question', {
         type: String
     },
     options: {
-        type: Array
+        type: Array,
+        value: String
     },
     correctOption: {
         type : String
