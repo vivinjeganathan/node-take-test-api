@@ -14,7 +14,22 @@ app.post('/', (request, response) => {
 });
 
 app.get('/', (request, response) => {
-    Question.find().then((question) => {
+
+    var query = {}
+
+    if (request.query.subject) {
+        query.subject = request.query.subject
+    }
+
+    if (request.query.unit) {
+        query.unit = request.query.unit
+    }
+
+    if (request.query.chapter) {
+        query.chapter = request.query.chapter
+    }
+
+    Question.find(query).then((question) => {
         response.send({
             question,
         })
