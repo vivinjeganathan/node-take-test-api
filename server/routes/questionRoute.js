@@ -17,6 +17,10 @@ app.get('/', (request, response) => {
 
     var query = {}
 
+    if (request.query.type) {
+        query.type = request.query.type
+    }
+
     if (request.query.subject) {
         query.subject = request.query.subject
     }
