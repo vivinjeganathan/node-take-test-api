@@ -14,10 +14,20 @@ app.get('/', (request, response) => {
     })
 });
 
+app.get('/all', (request, response) => {
+
+    Subject.find().then((subject) => {
+        response.send({subject})
+        //response.send({"asd" : {subject}})
+    }, (error) => {
+        response.status(400).send(error)
+    })
+});
+
 app.post('/', (request, response) => {
 
-    Subject(request.body).save().then((doc) => {
-        response.send(doc);
+    Subject(request.body).save().then((subject) => {
+        response.send(subject);
     }, (error) => {
         response.status(400).send(error);
     })
@@ -25,7 +35,6 @@ app.post('/', (request, response) => {
 
 app.patch('/unit', (request, response) => {
 
-    //var id = request.params.id
     var body = _.pick(request.body, ['name', 'subjectId'])
     
     if (!ObjectID.isValid(body.subjectId)) {
@@ -38,11 +47,11 @@ app.patch('/unit', (request, response) => {
         { _id: body.subjectId }, 
         { $push: { units: unitJson } },
         { "new": true },
-        function (error, document) {
+        function (error, subject) {
             if (error) {
                 response.status(400).send(error)
             } else {
-                response.send({document})
+                response.send({subject})
             }
         }
     );
@@ -62,11 +71,11 @@ app.patch('/unit/chapter', (request, response) => {
         { "_id": ObjectID(body.subjectId), "units": { "$elemMatch": { "_id": ObjectID(body.unitId) } } },
         { $push: { "units.$[t].chapters": chapterJson } },
         { arrayFilters: [ { "t._id": ObjectID(body.unitId) }] },
-        function (error, document) {
+        function (error, subject) {
             if (error) {
                 response.status(400).send(error)
             } else {
-                response.send(document)
+                response.send(subject)
             }
         }
     );

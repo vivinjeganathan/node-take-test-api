@@ -6,17 +6,17 @@ var { QuestionType } = require('../models/questionType');
 
 app.post('/', (request, response) => {
 
-    QuestionType(request.body).save().then((doc) => {
-        response.send(doc);
+    QuestionType(request.body).save().then((questionType) => {
+        response.send(questionType);
     }, (error) => {
         response.status(400).send(error);
     })
 });
 
 app.get('/', (request, response) => {
-    QuestionType.find().then((doc) => {
+    QuestionType.find().then((questionType) => {
         response.send(
-            doc
+            questionType
         )
     }, (error) => {
         response.status(400).send(error)
