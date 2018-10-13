@@ -6,11 +6,11 @@ var Subject = mongoose.model('subject', {
         _id: mongoose.Schema.ObjectId,
         type: Array,
         name: String,
-        chapters: [{
+        chapters: {
             _id: mongoose.Schema.ObjectId,
             name: String,
             type: Array
-        }]
+        }
     }    
 });
 

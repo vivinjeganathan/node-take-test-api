@@ -33,7 +33,7 @@ app.patch('/subType', (request, response) => {
         return response.status(404).send();
     }
 
-    var subTypeJson = { "subTypeId": new ObjectID(), "name": body.name};
+    var subTypeJson = { "_id": new ObjectID(), "name": body.name, "subjects": []};
     
     TestType.findOneAndUpdate(
         { _id: body.testTypeId }, 
@@ -44,6 +44,30 @@ app.patch('/subType', (request, response) => {
                 response.status(400).send(error)
             } else {
                 response.send({testType})
+            }
+        }
+    );
+})
+
+app.patch('/subType/subject', (request, response) => {
+
+    var body = _.pick(request.body, ['testTypeId', 'subTypeId', 'subjectId'])
+    
+    if (!ObjectID.isValid(body.testTypeId) && !ObjectID.isValid(body.subTypeId)) {
+        return response.status(404).send();
+    }
+
+    var subjectRefJson = { "subjectRef": body.subjectId };
+
+    TestType.update(
+        { "_id": ObjectID(body.testTypeId), "subTypes": { "$elemMatch": { "_id": ObjectID(body.subTypeId) } } },
+        { $push: { "subTypes.$[t].subjects": subjectRefJson } },
+        { arrayFilters: [ { "t._id": ObjectID(body.subTypeId) }] },
+        function (error, testType) {
+            if (error) {
+                response.status(400).send(error)
+            } else {
+                response.send(testType)
             }
         }
     );

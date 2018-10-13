@@ -1,13 +1,19 @@
 const { mongoose } = require('../db/mongoose');
 
 var TestType = mongoose.model('testType', {
-
     name: String,
     subTypes: {
+        _id: mongoose.Schema.ObjectId,
         type: Array,
-        subTypeId: mongoose.Schema.ObjectId,
         name: String,
+        subjects: {
+            type: Array,
+            subjectRef:{
+                type: mongoose.Schema.ObjectId,
+                ref: 'Subject'
+            }, 
+        }
     }
-});
+}); 
 
 module.exports = { TestType };
