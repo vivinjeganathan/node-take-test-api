@@ -25,13 +25,13 @@ app.get('/', (request, response) => {
 
 app.patch('/testCategory', (request, response) => {
 
-    var body = _.pick(request.body, ['examId', 'name'])
+    var body = _.pick(request.body, ['examId', 'name', 'duration'])
     
     if (!ObjectID.isValid(body.examId)) {
         return response.status(404).send();
     }
 
-    var testCategoryJson = { "_id": new ObjectID(), "name": body.name, "subjects": [], "tests": []};
+    var testCategoryJson = { "_id": new ObjectID(), "name": body.name, "duration": body.duration, "subjects": [], "tests": []};
 
     Examination.findOneAndUpdate(
         { _id: body.examId }, 
