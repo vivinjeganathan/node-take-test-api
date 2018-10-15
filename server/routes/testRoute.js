@@ -15,9 +15,7 @@ app.post('/', (request, response) => {
 
 app.get('/', (request, response) => {
     Test.find().then((doc) => {
-        response.send(
-            doc
-        )
+        response.send(doc)
     }, (error) => {
         response.status(400).send(error)
     })

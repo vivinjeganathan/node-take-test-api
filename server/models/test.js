@@ -4,21 +4,7 @@ var Test = mongoose.model('test', {
     name: {
         type: String
     }, 
-    type: {
-        type: String
-    },
-    subType: {
-        type: String
-    },
-    duration: {
-        type: String
-    },
-    instructionSetID:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Instruction'
-    }, 
     subjects: {
-
         type: Array,
         subjectRef: {
             type: mongoose.Schema.ObjectId,
