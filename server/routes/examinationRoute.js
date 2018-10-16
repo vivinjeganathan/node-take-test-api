@@ -16,7 +16,9 @@ app.post('/', (request, response) => {
 });
 
 app.get('/', (request, response) => {
-    Examination.find().then((examination) => {
+    Examination.find()
+        .populate({ path: 'testCategory.subjects', select: 'name' })
+        .then((examination) => {
         response.send(examination)
     }, (error) => {
         response.status(400).send(error)
@@ -25,13 +27,17 @@ app.get('/', (request, response) => {
 
 app.patch('/testCategory', (request, response) => {
 
-    var body = _.pick(request.body, ['examId', 'name', 'duration'])
+    var body = _.pick(request.body, ['examId', 'name', 'duration', 'maxNoOfQuestions'])
     
     if (!ObjectID.isValid(body.examId)) {
         return response.status(404).send();
     }
 
-    var testCategoryJson = { "_id": new ObjectID(), "name": body.name, "duration": body.duration, "subjects": [], "tests": []};
+    var testCategoryJson = { "_id": new ObjectID(),
+                             "name": body.name, 
+                             "duration": body.duration,
+                             "maxNoOfQuestions":body.maxNoOfQuestions, 
+                             "subjects": [], "tests": []};
 
     Examination.findOneAndUpdate(
         { _id: body.examId }, 
@@ -83,7 +89,7 @@ app.patch('/testCategory/subject', (request, response) => {
 
     Examination.update(
         { "_id": ObjectID(body.examId), "testCategory": { "$elemMatch": { "_id": ObjectID(body.testCategoryId) } } },
-        { $push: { "testCategory.$[t].subjects": subjectRefJson } },
+        { $push: { "testCategory.$[t].subjects": body.subjectId } },
         { arrayFilters: [ { "t._id": ObjectID(body.testCategoryId) }] },
         function (error, examination) {
             if (error) {
