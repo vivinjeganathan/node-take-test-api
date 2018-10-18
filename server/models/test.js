@@ -4,20 +4,16 @@ var Test = mongoose.model('test', {
     name: {
         type: String
     }, 
-    subjects: {
-        type: Array,
-        subjectRef: {
+    subjects: [{
+        subject: {
             type: mongoose.Schema.ObjectId,
-            ref: 'Subject',
+            ref: 'subject',
         },
-        questions: {
-            type: Array,
-            questionRef: {
-                type: mongoose.Schema.ObjectId,
-                ref: 'Question'
-            }
-        }
-    }
+        questions: [{
+            type: mongoose.Schema.ObjectId,
+            ref: 'question'
+        }]
+    }]
 });
 
 module.exports = { Test };

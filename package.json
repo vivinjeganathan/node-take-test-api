@@ -16,6 +16,8 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "graphql": "^14.0.2",
     "lodash": "^4.17.10",
     "mongodb": "^3.0.10",
     "mongoose": "^5.1.6",

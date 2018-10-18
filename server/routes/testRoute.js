@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const ObjectID = require('mongodb').ObjectID
+const _ = require('lodash')
 
 var { Test } = require('../models/test');
 
@@ -20,6 +21,31 @@ app.get('/', (request, response) => {
         response.status(400).send(error)
     })
 });
+
+app.patch('/subject', (request, response) => {
+
+    var body = _.pick(request.body, ['testId','subjectId'])
+    
+    if (!ObjectID.isValid(body.testId)) {
+        return response.status(404).send();
+    }
+
+    var subjectJson = { "subject": body.subjectId, 
+                        "questions": []};
+
+    Test.findOneAndUpdate(
+        { _id: body.testId }, 
+        { $push: { subjects: subjectJson } },
+        { "new": true },
+        function (error, test) {
+            if (error) {
+                response.status(400).send(error)
+            } else {
+                response.send(test)
+            }
+        }
+    );
+})
 
 app.delete('/:id', (request, response) => {
 

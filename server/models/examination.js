@@ -15,17 +15,20 @@ var Examination = mongoose.model('examination', {
         maxNoOfQuestions: {
             type: String
         },
+        maxMarks:{
+            type: String
+        },
+        negativeMarkingPercentage:{
+            type: String
+        },
         instructionSetID:{
             type: mongoose.Schema.ObjectId,
-            ref: 'Instruction'
+            ref: 'instruction'
         },
-        tests: {
-            type: Array,
-            testRef:{
-                type: mongoose.Schema.ObjectId,
-                ref: 'Test'
-            },
-        }
+        tests: [{
+            type: mongoose.Schema.ObjectId,
+            ref: 'test'  
+        }]
     }]
 }); 
 
