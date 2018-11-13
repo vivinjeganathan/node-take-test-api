@@ -22,8 +22,14 @@ var Test = mongoose.model('test', {
         maxMarks:{
             type: String
         },
+        maxNoOfQuestions: {
+            type: String
+        }
     }],
     duration: {
+        type: String
+    },
+    maxNoOfQuestions: {
         type: String
     },
     maxMarks:{

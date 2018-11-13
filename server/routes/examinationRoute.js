@@ -17,7 +17,7 @@ app.post('/', (request, response) => {
 
 app.get('/', (request, response) => {
     Examination.find()
-        .populate({ path: 'testCategory.subjects', select: 'name' })
+        .populate({ path: 'testCategory.subjects.subject', select: 'name' })
         .then((examination) => {
         response.send(examination)
     }, (error) => {
@@ -27,7 +27,7 @@ app.get('/', (request, response) => {
 
 app.patch('/testCategory', (request, response) => {
 
-    var body = _.pick(request.body, ['examId', 'name', 'duration', 'maxNoOfQuestions'])
+    var body = _.pick(request.body, ['examId', 'name', 'duration', 'maxNoOfQuestions','maxMarks','negativeMarkingPercentage'])
     
     if (!ObjectID.isValid(body.examId)) {
         return response.status(404).send();
@@ -36,7 +36,9 @@ app.patch('/testCategory', (request, response) => {
     var testCategoryJson = { "_id": new ObjectID(),
                              "name": body.name, 
                              "duration": body.duration,
-                             "maxNoOfQuestions":body.maxNoOfQuestions, 
+                             "maxNoOfQuestions":body.maxNoOfQuestions,
+                             "maxMarks":body.maxMarks,
+                             "negativeMarkingPercentage":body.negativeMarkingPercentage, 
                              "subjects": [], "tests": []};
 
     Examination.findOneAndUpdate(
@@ -53,6 +55,7 @@ app.patch('/testCategory', (request, response) => {
     );
 })
 
+//Needs to be called on post test method 
 app.patch('/testCategory/test', (request, response) => {
 
     var body = _.pick(request.body, ['examId', 'testCategoryId', 'testId'])
@@ -79,17 +82,17 @@ app.patch('/testCategory/test', (request, response) => {
 
 app.patch('/testCategory/subject', (request, response) => {
 
-    var body = _.pick(request.body, ['examId', 'testCategoryId', 'subjectId'])
+    var body = _.pick(request.body, ['examId', 'testCategoryId', 'subjectId', 'maxNoOfQuestions', 'maxMarks'])
     
     if (!ObjectID.isValid(body.examId) && !ObjectID.isValid(body.testCategoryId)) {
         return response.status(404).send();
     }
 
-    var subjectRefJson = { "subjectRef": body.subjectId };
+    var subjectRefJson = { "subject": body.subjectId, "maxNoOfQuestions": body.maxNoOfQuestions, 'maxMarks': body.maxMarks};
 
     Examination.update(
         { "_id": ObjectID(body.examId), "testCategory": { "$elemMatch": { "_id": ObjectID(body.testCategoryId) } } },
-        { $push: { "testCategory.$[t].subjects": body.subjectId } },
+        { $push: { "testCategory.$[t].subjects": subjectRefJson } },
         { arrayFilters: [ { "t._id": ObjectID(body.testCategoryId) }] },
         function (error, examination) {
             if (error) {

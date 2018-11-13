@@ -6,8 +6,16 @@ var Examination = mongoose.model('examination', {
         _id: mongoose.Schema.ObjectId,
         name: String, //Revision, Mock...
         subjects: [{
-            type: mongoose.Schema.ObjectId,
-            ref: 'subject'
+            subject: {
+                type: mongoose.Schema.ObjectId,
+                ref: 'subject',
+            },
+            maxNoOfQuestions: [{
+                type: String
+            }],
+            maxMarks:{
+                type: String
+            },
         }],
         duration: {
             type: String

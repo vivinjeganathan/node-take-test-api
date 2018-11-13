@@ -24,14 +24,16 @@ app.get('/', (request, response) => {
 
 app.patch('/subject', (request, response) => {
 
-    var body = _.pick(request.body, ['testId','subjectId'])
+    var body = _.pick(request.body, ['testId', 'subjectId', 'questions', 'maxMarks', 'maxNoOfQuestions'])
     
     if (!ObjectID.isValid(body.testId)) {
         return response.status(404).send();
     }
 
     var subjectJson = { "subject": body.subjectId, 
-                        "questions": []};
+                        "maxMarks": body.maxMarks,
+                        "maxNoOfQuestions": body.maxNoOfQuestions,
+                        "questions": body.questions};
 
     Test.findOneAndUpdate(
         { _id: body.testId }, 
