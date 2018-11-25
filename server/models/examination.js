@@ -10,9 +10,9 @@ var Examination = mongoose.model('examination', {
                 type: mongoose.Schema.ObjectId,
                 ref: 'subject',
             },
-            maxNoOfQuestions: [{
+            maxNoOfQuestions: {
                 type: String
-            }],
+            },
             maxMarks:{
                 type: String
             },
