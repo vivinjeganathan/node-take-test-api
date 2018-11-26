@@ -18,6 +18,7 @@ app.post('/', (request, response) => {
 app.get('/', (request, response) => {
     Examination.find()
         .populate({ path: 'testCategory.subjects.subject', select: 'name' })
+        .populate({ path: 'testCategory.tests', select: 'name' })
         .then((examination) => {
         response.send(examination)
     }, (error) => {

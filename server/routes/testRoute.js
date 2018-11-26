@@ -4,11 +4,55 @@ const ObjectID = require('mongodb').ObjectID
 const _ = require('lodash')
 
 var { Test } = require('../models/test');
+var { Examination } = require('../models/examination');
 
 app.post('/', (request, response) => {
 
+    var body = _.pick(request.body, ['testName', 
+                                     'examinationId', 'testCategoryId', 'subjects',
+                                     'duration', 'maxNoOfQuestions', 
+                                     'maxMarks', 'negativeMarkingPercentage', 
+                                     'instructionSetID', 'difficultyLevel'])
+    
+    if (!ObjectID.isValid(body.examinationId) && !ObjectID.isValid(body.testCategoryId)) {
+        return response.status(404).send();
+    }
+
+    //Validate
+    if(body.subjects) {
+        for(subject in body.subjects) {
+
+        }
+    }
+
+    var testJson = { "name": body.testName, 
+                "examination": body.examinationId,
+                "testCategory": body.testCategoryId,
+                "subjects":body.subject,
+                "duration": body.duration,
+                "maxNoOfQuestions": body.maxNoOfQuestions,
+                "maxMarks": body.maxMarks,
+                "negativeMarkingPercentage": body.negativeMarkingPercentage,
+                "instructionSetID": body.instructionSetID,
+                "difficultyLevel": body.difficultyLevel
+            };
+            
     Test(request.body).save().then((test) => {
-        response.send(test);
+    
+        Examination.update(
+            { "_id": ObjectID(body.examinationId), "testCategory": { "$elemMatch": { "_id": ObjectID(body.testCategoryId) } } },
+            { $push: { "testCategory.$[t].tests": test._id } },
+            { arrayFilters: [ { "t._id": ObjectID(body.testCategoryId) }] },
+            function (error, examination) {
+                if (error) {
+                    response.status(400).send(error)
+                } else {
+                    //response.send(test);
+                    response.send(examination)
+                }
+            }
+        );
+
     }, (error) => {
         response.status(400).send(error);
     })
@@ -58,6 +102,22 @@ app.delete('/:id', (request, response) => {
     }
 
     Test.findByIdAndRemove(id).then((test) => {
+        if (!test) {
+            return response.status(404).send();
+        }
+        //Remove test ref in exam table also - todo
+
+        response.send(test)
+    }).catch((error) => {
+        return response.status(400).send();
+    })
+})
+
+app.delete('', (request, response) => {
+
+    var id = request.params.id
+
+    Test.remove().then((test) => {
         if (!test) {
             return response.status(404).send();
         }
