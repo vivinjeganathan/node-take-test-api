@@ -59,7 +59,16 @@ app.post('/', (request, response) => {
 });
 
 app.get('/', (request, response) => {
-    Test.find().then((doc) => {
+
+    var query = {}
+
+    if (request.query._id) {
+        query._id = request.query._id
+    }
+
+    Test.find(query)
+        .populate({ path: 'subjects.subject', select: 'name' })
+        .populate({ path: 'subjects.questions', select: 'description' }).then((doc) => {
         response.send(doc)
     }, (error) => {
         response.status(400).send(error)
