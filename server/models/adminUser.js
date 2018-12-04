@@ -1,6 +1,6 @@
 var { mongoose } = require('../db/mongoose'); 
 
-var User = mongoose.model('user', {
+var AdminUser = mongoose.model('adminUser', {
     username: {
         type: String,
         required: true,
@@ -11,4 +11,4 @@ var User = mongoose.model('user', {
     }
 });
 
-module.exports = { User };
+module.exports = { AdminUser };
