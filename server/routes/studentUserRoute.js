@@ -17,7 +17,7 @@ app.post('/', (request, response) => {
 
 app.post('/sendInvite', (request, response) => {
 
-    var body = _.pick(request.body, ['toEmail'])
+    var body = _.pick(request.body, ['username','websiteLink'])
 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -27,30 +27,42 @@ app.post('/sendInvite', (request, response) => {
         }
     });
 
-    var mailOptions = {
-        from: 'smartsolutionsforsuccess2011@gmail.com',
-        to: body.toEmail,
-        subject: 'Welcome to Take Test',
-        text: 'Please login and create an account'
-    };
+    StudentUser(request.body).save().then((studentUser) => {
+        
+        var mailOptions = {
+            from: 'smartsolutionsforsuccess2011@gmail.com',
+            to: body.username,
+            subject: 'Welcome to Take Test',
+            text: 'You have been invited to use take test website. \n' + 
+                  'Please click on the below link to create an account and start writing your tests! \n' +
+                   body.websiteLink + '/' + studentUser._id + ' \n' +
+                   'Please do not respond to this e-mail. This mailbox is not monitored and you will not receive a response.'
+        };
 
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-          response.send(info.response)
-        //   StudentUser(request.body).save().then((studentUser) => {
-        //         response.send(studentUser);
-        //     }, (error) => {
-        //         response.status(400).send(error);
-        //     })
-        }
-    });
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+              response.send({'response':info.response})
+            }
+        });
+
+    }, (error) => {
+        console.log(error);
+        response.status(400).send(error);
+    })
 });
 
 app.get('/', (request, response) => {
-    StudentUser.find().then((studentUser) => {
+
+    var query = {}
+
+    if (request.query._id) {
+        query._id = request.query._id
+    }
+
+    StudentUser.find(query).then((studentUser) => {
         response.send(
             studentUser
         )
