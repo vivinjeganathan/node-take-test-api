@@ -31,7 +31,10 @@ var StudentUser = mongoose.model('studentUser', {
             type: mongoose.Schema.ObjectId,
             ref: 'examination',
         },
-    }]
+    }],
+    status: {
+        type: String
+    }
 });
 
 module.exports = { StudentUser };

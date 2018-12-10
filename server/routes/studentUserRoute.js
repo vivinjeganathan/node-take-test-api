@@ -44,7 +44,7 @@ app.post('/sendInvite', (request, response) => {
               console.log(error);
             } else {
               console.log('Email sent: ' + info.response);
-              response.send({'response':info.response})
+              response.send(studentUser)
             }
         });
 
@@ -76,7 +76,7 @@ app.patch('/', (request, response) => {
     var body = _.pick(request.body, ['studentId', 'firstName', 'lastName',
                                      'mobileNumber', 'gender',
                                      'dateOfBirth', 'address', 
-                                     'password', 'preferredExams'])
+                                     'password', 'preferredExams', 'status'])
     
     if (!ObjectID.isValid(body.studentId)) {
         return response.status(404).send();
@@ -85,7 +85,7 @@ app.patch('/', (request, response) => {
     var studentJson = { "firstName": body.firstName, "lastName": body.lastName,
                         "gender": body.gender, "dateOfBirth": body.dateOfBirth,
                         "address": body.address,"password": body.password,
-                        "preferredExams": body.preferredExams };
+                        "preferredExams": body.preferredExams, 'status': body.status };
     
     StudentUser.findOneAndUpdate(
         { _id: body.studentId }, 
