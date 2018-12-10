@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const ObjectID = require('mongodb').ObjectID
 const _ = require('lodash')
+var nodemailer = require('nodemailer');
 
 var { StudentUser } = require('../models/studentUser');
 
@@ -12,6 +13,40 @@ app.post('/', (request, response) => {
     }, (error) => {
         response.status(400).send(error);
     })
+});
+
+app.post('/sendInvite', (request, response) => {
+
+    var body = _.pick(request.body, ['toEmail'])
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'smartsolutionsforsuccess2011@gmail.com',
+            pass: 'alwaysSm@rt'
+        }
+    });
+
+    var mailOptions = {
+        from: 'smartsolutionsforsuccess2011@gmail.com',
+        to: body.toEmail,
+        subject: 'Welcome to Take Test',
+        text: 'Please login and create an account'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+          response.send(info.response)
+        //   StudentUser(request.body).save().then((studentUser) => {
+        //         response.send(studentUser);
+        //     }, (error) => {
+        //         response.status(400).send(error);
+        //     })
+        }
+    });
 });
 
 app.get('/', (request, response) => {
