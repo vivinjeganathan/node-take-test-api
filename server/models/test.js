@@ -4,11 +4,17 @@ var Test = mongoose.model('test', {
     name: {
         type: String
     }, 
+    examinationGroup:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'examinationGroup',
+    },
     examination:{
-        type: String
+        type: mongoose.Schema.ObjectId,
+        ref: 'examination',
     },
     testCategory:{
-        type: String
+        type: mongoose.Schema.ObjectId,
+        ref: 'testCategory',
     },
     subjects: [{
         subject: {

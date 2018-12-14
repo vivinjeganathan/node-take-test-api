@@ -4,29 +4,20 @@ const ObjectID = require('mongodb').ObjectID
 
 const _ = require('lodash')
 
-var { Examination } = require('../models/examination');
+var { ExaminationGroup } = require('../models/examinationGroup');
 
 app.post('/', (request, response) => {
 
-    Examination(request.body).save().then((examination) => {
-        response.send(examination);
+    ExaminationGroup(request.body).save().then((examinationGroup) => {
+        response.send(examinationGroup);
     }, (error) => {
         response.status(400).send(error);
     })
 });
 
 app.get('/', (request, response) => {
-
-    var query = {}
-
-    if (request.query.examinationGroup) {
-        query.examinationGroup = request.query.examinationGroup
-    }
-
-    Examination.find(query)
-        .populate({ path: 'examinationGroup', select: 'name' })
-        .then((examination) => {
-        response.send(examination)
+    ExaminationGroup.find().then((examinationGroup) => {
+        response.send(examinationGroup)
     }, (error) => {
         response.status(400).send(error)
     })
@@ -40,8 +31,8 @@ app.delete('/:id', (request, response) => {
         return response.status(404).send();
     }
 
-    Examination.findByIdAndRemove(id).then((examination) => {
-        if (!examination) {
+    ExaminationGroup.findByIdAndRemove(id).then((examinationGroup) => {
+        if (!examinationGroup) {
             return response.status(404).send();
         }
 

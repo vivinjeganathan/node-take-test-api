@@ -4,12 +4,12 @@ const ObjectID = require('mongodb').ObjectID
 
 const _ = require('lodash')
 
-var { Examination } = require('../models/examination');
+var { TestCategory } = require('../models/testCategory');
 
 app.post('/', (request, response) => {
 
-    Examination(request.body).save().then((examination) => {
-        response.send(examination);
+    TestCategory(request.body).save().then((examinationGroup) => {
+        response.send(examinationGroup);
     }, (error) => {
         response.status(400).send(error);
     })
@@ -22,11 +22,16 @@ app.get('/', (request, response) => {
     if (request.query.examinationGroup) {
         query.examinationGroup = request.query.examinationGroup
     }
+    if (request.query.examination) {
+        query.examination = request.query.examination
+    }
 
-    Examination.find(query)
+    TestCategory.find(query)
+        .populate({ path: 'examination', select: 'name' })
         .populate({ path: 'examinationGroup', select: 'name' })
-        .then((examination) => {
-        response.send(examination)
+        .populate({ path: 'subjects.subject', select: 'name' })
+        .then((testCategory) => {
+        response.send(testCategory)
     }, (error) => {
         response.status(400).send(error)
     })
@@ -40,12 +45,12 @@ app.delete('/:id', (request, response) => {
         return response.status(404).send();
     }
 
-    Examination.findByIdAndRemove(id).then((examination) => {
-        if (!examination) {
+    TestCategory.findByIdAndRemove(id).then((testCategory) => {
+        if (!testCategory) {
             return response.status(404).send();
         }
 
-        response.send(examinationGroup)
+        response.send(testCategory)
     }).catch((error) => {
         return response.status(400).send();
     })
