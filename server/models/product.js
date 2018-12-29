@@ -5,25 +5,15 @@ var Product = mongoose.model('product', {
     description: String,
     startTime: String,
     endTime: String,
+    isAcademicProduct: String,
     productCost: String,
-    discountPercentage: String,
-    examinations: [{
-        _id: mongoose.Schema.ObjectId,
-        examination: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'examination',
-        },
-        testCategories: [{
-            _id: mongoose.Schema.ObjectId,
-            testCategory: {
-                type: mongoose.Schema.ObjectId,
-                ref: 'testCategory',
-            },
-            tests: [{
-                type: mongoose.Schema.ObjectId,
-                ref: 'test'  
-            }]
-        }],
+    tests: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'test'  
+    }],
+    associatedStudents: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'studentUser'
     }]
 }); 
 

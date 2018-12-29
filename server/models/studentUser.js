@@ -34,6 +34,9 @@ var StudentUser = mongoose.model('studentUser', {
     }],
     status: {
         type: String
+    },
+    group: {
+        type: String
     }
 });
 
