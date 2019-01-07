@@ -11,6 +11,7 @@ const examinationRoute = require('./examinationRoute');
 const testCategoryRoute = require('./testCategoryRoute');
 const studentUserRoute = require('./studentUserRoute');
 const productRoute = require('./productRoute');
+const studentBatchRoute = require('./studentBatchRoute');
 
 app.use('/question', questionRoute);
 app.use('/subject', subjectRoute);
@@ -22,5 +23,6 @@ app.use('/examination', examinationRoute);
 app.use('/testCategory', testCategoryRoute);
 app.use('/studentUser', studentUserRoute);
 app.use('/product', productRoute);
+app.use('/studentBatch', studentBatchRoute);
 
 module.exports = app;

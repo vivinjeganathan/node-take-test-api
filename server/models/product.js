@@ -5,13 +5,13 @@ var Product = mongoose.model('product', {
     description: String,
     startTime: String,
     endTime: String,
-    isAcademicProduct: String,
+    isAcademicProduct: Boolean,
     productCost: String,
     tests: [{
         type: mongoose.Schema.ObjectId,
         ref: 'test'  
     }],
-    associatedStudents: [{
+    associatedStudentBatches: [{
         type: mongoose.Schema.ObjectId,
         ref: 'studentUser'
     }]
