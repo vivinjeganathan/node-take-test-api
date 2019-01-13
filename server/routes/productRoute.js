@@ -19,17 +19,33 @@ app.get('/', (request, response) => {
 
     var query = {}
 
-    if (request.query.id) {
-        query._id = request.query.id
+    if (request.query._id) {
+        query._id = request.query._id
     }
 
-    Product.find(query)
-        .populate({ path: 'tests.name', select: 'name' })
-        .then((product) => {
-        response.send(product)
-    }, (error) => {
-        response.status(400).send(error)
-    })
+    if (request.query.examinationGroup) {
+        query.examinationGroup = request.query.examinationGroup
+    }
+
+    if (request.query.productName) {
+
+        Product.find( { $text: { $search: request.query.productName } } )
+            .populate({ path: 'tests.name', select: 'name' })
+            .then((product) => {
+            response.send(product)
+        }, (error) => {
+            response.status(400).send(error)
+        })
+    } else {
+
+        Product.find(query)
+            .populate({ path: 'tests.name', select: 'name' })
+            .then((product) => {
+            response.send(product)
+        }, (error) => {
+            response.status(400).send(error)
+        })
+    }
 });
 
 app.delete('/:id', (request, response) => {

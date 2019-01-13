@@ -7,6 +7,10 @@ var Product = mongoose.model('product', {
     endTime: String,
     isAcademicProduct: Boolean,
     productCost: String,
+    examinationGroup: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'examinationGroup'  
+    },
     tests: [{
         type: mongoose.Schema.ObjectId,
         ref: 'test'  
