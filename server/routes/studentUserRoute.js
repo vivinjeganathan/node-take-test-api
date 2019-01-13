@@ -62,13 +62,31 @@ app.get('/', (request, response) => {
         query._id = request.query._id
     }
 
-    StudentUser.find(query).then((studentUser) => {
-        response.send(
-            studentUser
-        )
-    }, (error) => {
-        response.status(400).send(error)
-    })
+    if (request.query.examinationGroup) {
+        query.preferredExams = request.query.examinationGroup
+    }
+
+    if (request.query.batch) {
+        query.group = request.query.batch
+    }
+
+    if (request.query.searchForText) {
+        StudentUser.find( { $text: { $search: request.query.searchForText } } ).then((studentUser) => {
+            response.send(
+                studentUser
+            )
+        }, (error) => {
+            response.status(400).send(error)
+        })
+    } else {
+        StudentUser.find(query).then((studentUser) => {
+            response.send(
+                studentUser
+            )
+        }, (error) => {
+            response.status(400).send(error)
+        })
+    }
 });
 
 app.patch('/', (request, response) => {

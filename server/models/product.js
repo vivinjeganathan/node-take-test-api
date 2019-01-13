@@ -13,7 +13,7 @@ var Product = mongoose.model('product', {
     }],
     associatedStudentBatches: [{
         type: mongoose.Schema.ObjectId,
-        ref: 'studentUser'
+        ref: 'studentBatch'
     }]
 }); 
 

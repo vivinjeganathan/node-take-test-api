@@ -26,17 +26,16 @@ var StudentUser = mongoose.model('studentUser', {
     password: {
         type: String
     },
-    preferredExams: [{
-        examination: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'examination',
-        },
-    }],
+    preferredExams: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'examination',
+    },
     status: {
         type: String
     },
     group: {
-        type: String
+        type: mongoose.Schema.ObjectId,
+        ref: 'studentBatch'
     }
 });
 
