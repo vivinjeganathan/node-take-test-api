@@ -12,6 +12,8 @@ const testCategoryRoute = require('./testCategoryRoute');
 const studentUserRoute = require('./studentUserRoute');
 const productRoute = require('./productRoute');
 const studentBatchRoute = require('./studentBatchRoute');
+const adminUserRoute = require('./adminUserRoute');
+const takeTestAccountRoute = require('./takeTestAccountRoute');
 
 app.use('/question', questionRoute);
 app.use('/subject', subjectRoute);
@@ -24,5 +26,7 @@ app.use('/testCategory', testCategoryRoute);
 app.use('/studentUser', studentUserRoute);
 app.use('/product', productRoute);
 app.use('/studentBatch', studentBatchRoute);
+app.use('/adminUser', adminUserRoute);
+app.use('/takeTestAccount', takeTestAccountRoute);
 
 module.exports = app;
